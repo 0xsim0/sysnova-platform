@@ -2,7 +2,7 @@ import { ImageResponse } from "next/og";
 import { BLOG_POSTS } from "@/lib/blogsMeta";
 
 export const runtime = "nodejs"; // ImageResponse works on node; explicit for clarity
-export const contentType = "image/png";
+
 
 // NOTE: satori (next/og renderer) only supports flexbox — every container below sets
 // `display: "flex"`. Do not add a plain <p>/<span> wrapper without it, or layout breaks.
