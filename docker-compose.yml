@@ -2,6 +2,10 @@ services:
   web:
     build:
       context: .
+    environment:
+      ALLOWED_ORIGINS: "http://127.0.0.1:3001"
+      KV_REST_API_URL: ""
+      KV_REST_API_TOKEN: ""
     image: sysnova-web:dev
     ports:
       - "127.0.0.1:3000:3000"
