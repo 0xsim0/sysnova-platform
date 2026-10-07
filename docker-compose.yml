@@ -11,6 +11,7 @@ services:
       RESEND_API_KEY: ""
       ALLOWED_ORIGINS: "http://127.0.0.1:3001"
       KV_REST_API_URL: ""
+      ANALYTICS_ENABLED: "false"
       KV_REST_API_TOKEN: ""
     restart: unless-stopped
     init: true

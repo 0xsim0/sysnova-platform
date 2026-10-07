@@ -230,7 +230,7 @@ export default async function RootLayout({
   const rawNonce = headersList.get("x-nonce");
   const nonceProps = rawNonce !== null ? { nonce: rawNonce } : {};
   const ssrLang = (headersList.get("x-lang") ?? "de") as "de" | "en";
-
+  const analyticsEnabled = process.env.ANALYTICS_ENABLED === "true";
   return (
     <html lang={ssrLang} className="dark" data-scroll-behavior="smooth" suppressHydrationWarning>
       <head>
@@ -246,9 +246,13 @@ export default async function RootLayout({
           {children}
           <WhatsAppButton />
           <CookieBanner />
-          <GoogleAnalytics {...nonceProps} />
-          <Analytics />
-          <SpeedInsights />
+          {analyticsEnabled && (
+            <>
+              <GoogleAnalytics {...nonceProps} />
+              <Analytics />
+              <SpeedInsights />
+            </>
+          )}
         </LanguageProvider>
       </body>
     </html>
