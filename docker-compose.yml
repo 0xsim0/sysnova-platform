@@ -27,7 +27,7 @@ services:
       retries: 3
 
   proxy:
-    image: nginx:stable-alpine
+    image: nginx:stable-alpine@sha256:0985e772fb9f729e6fa0980da05fca5d9c468e870eed43071545afa9d2e27d94
     restart: unless-stopped
     ports:
       - "127.0.0.1:3000:80"
@@ -38,7 +38,7 @@ services:
         condition: service_healthy
 
   mailpit:
-    image: axllent/mailpit:v1.27.4
+    image: axllent/mailpit:v1.27.4@sha256:df6c2541907e1be6fac21f509927cf6ed771617a1f4b361ef66d97bd05593d2d
     restart: unless-stopped
     ports:
       - "127.0.0.1:8025:8025"
