@@ -2,7 +2,11 @@ services:
   web:
     build:
       context: .
+    env_file:
+      - .env.homelab
     environment:
+      EMAIL_PROVIDER: "mailpit"
+      RESEND_API_KEY: ""
       ALLOWED_ORIGINS: "http://127.0.0.1:3001"
       KV_REST_API_URL: ""
       KV_REST_API_TOKEN: ""
@@ -21,3 +25,10 @@ services:
       timeout: 5s
       start_period: 20s
       retries: 3
+
+
+  mailpit:
+    image: axllent/mailpit:v1.27.4
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8025:8025"

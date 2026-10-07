@@ -1,5 +1,5 @@
 import "server-only";
-import { Resend } from "resend";
+import { sendEmail } from "@/lib/mailTransport";
 import { CONTACT_EMAIL, SENDER_EMAIL } from "@/lib/config";
 
 export function escapeHtml(s: string): string {
@@ -21,19 +21,9 @@ export interface ContactPayload {
   message: string;
 }
 
-let _resend: Resend | null = null;
-
-function getResend(): Resend {
-  if (!_resend) {
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) throw new Error("RESEND_API_KEY is not set");
-    _resend = new Resend(apiKey);
-  }
-  return _resend;
-}
 
 export async function sendOtpEmail(email: string, code: string) {
-  return getResend().emails.send({
+  return sendEmail({
     from: `SysNova <${SENDER_EMAIL}>`,
     to: [email],
     subject: "Your SysNova verification code",
@@ -60,7 +50,7 @@ export async function sendContactEmail(payload: ContactPayload) {
   const eCompany = company ? escapeHtml(company) : undefined;
   const eMessage = escapeHtml(message);
 
-  return getResend().emails.send({
+  return sendEmail({
     from: `SysNova Contact <${SENDER_EMAIL}>`,
     to:   [CONTACT_EMAIL],
     replyTo: sanitizeHeader(email),
