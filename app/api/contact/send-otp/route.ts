@@ -3,6 +3,7 @@ import { generateOtp, createOtpToken } from "@/lib/otp";
 import { sendOtpEmail } from "@/lib/email";
 import { checkAndSetCooldown, checkIpLimit } from "@/lib/rateLimit";
 import { isAllowedOrigin, getClientIp } from "@/lib/apiUtils";
+import { isEmailConfigured } from "@/lib/mailTransport";
 
 export async function POST(req: NextRequest) {
   if (!isAllowedOrigin(req.headers.get("origin"))) {
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!process.env.RESEND_API_KEY) {
+    if (!isEmailConfigured()) {
       return NextResponse.json({ error: "Email service not configured." }, { status: 503 });
     }
 

@@ -1,0 +1,44 @@
+
+services:
+  web:
+    build:
+      context: .
+    image: sysnova-web:dev
+    env_file:
+      - .env.homelab
+    environment:
+      EMAIL_PROVIDER: "mailpit"
+      RESEND_API_KEY: ""
+      ALLOWED_ORIGINS: "http://127.0.0.1:3001,http://127.0.0.1:3000"
+      KV_REST_API_URL: ""
+      ANALYTICS_ENABLED: "false"
+      KV_REST_API_TOKEN: ""
+    restart: unless-stopped
+    init: true
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - "fetch('http://127.0.0.1:3000/', {signal: AbortSignal.timeout(4000)}).then(r => process.exit(r.status === 200 ? 0 : 1)).catch(() => process.exit(1))"
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+      retries: 3
+
+  proxy:
+    image: nginx:stable-alpine@sha256:0985e772fb9f729e6fa0980da05fca5d9c468e870eed43071545afa9d2e27d94
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:80"
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      web:
+        condition: service_healthy
+
+  mailpit:
+    image: axllent/mailpit:v1.27.4@sha256:df6c2541907e1be6fac21f509927cf6ed771617a1f4b361ef66d97bd05593d2d
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8025:8025"

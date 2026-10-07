@@ -4,6 +4,7 @@ import { verifyOtpToken } from "@/lib/otp";
 import { ApiErrors } from "@/lib/apiErrors";
 import { getAttemptCount, incrementAttempts, clearAttempts, MAX_ATTEMPTS, checkContactIpLimit } from "@/lib/rateLimit";
 import { isAllowedOrigin, getClientIp } from "@/lib/apiUtils";
+import { isEmailConfigured } from "@/lib/mailTransport";
 
 export async function POST(req: NextRequest) {
   if (!isAllowedOrigin(req.headers.get("origin"))) {
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
     }
 
-    if (!process.env.RESEND_API_KEY) {
+    if (!isEmailConfigured()) {
       return NextResponse.json(
         { error: "Email service not configured." },
         { status: 503 }
