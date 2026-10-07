@@ -149,7 +149,14 @@ damit es dessen möglicherweise geänderte interne IP neu auflöst.
 - Erlaubte und nicht erlaubte Origins
 - Bestätigungscode und Kontaktanfrage über Mailpit, auch hinter Nginx
 - Keine beobachteten Analytics-Anfragen im Homelab-Browsertest
+- Frischen lokalen Git-Clone von feature/docker erstellt
+- Eigenes OTP-Geheimnis per Setup-Skript erzeugt
+- Separate Compose-Umgebung auf alternativen Ports gestartet
+- Startseite und OG-Bild erfolgreich abgerufen
+- Vollständigen Kontaktformular-Ablauf mit beiden Nachrichten in Mailpit geprüft
 
+Dieser Test erfolgte auf dem vorhandenen Docker-Host.
+Ein vollständig neu installiertes Linux-System wurde noch nicht getestet.
 ## Grenzen der Testumgebung
 
 - OTP-Codes und Rate-Limits liegen im Arbeitsspeicher.
@@ -161,4 +168,4 @@ damit es dessen möglicherweise geänderte interne IP neu auflöst.
   IP-basierte Limits können deshalb mehrere Nutzer zusammenfassen.
 - Der Healthcheck prüft die Startseite, nicht den E-Mail-Ablauf.
 - Einige Image-Tags sind noch beweglich.
-- Ein vollständiger Test aus einer frischen Projektkopie steht noch aus.
+
