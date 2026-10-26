@@ -93,6 +93,21 @@ services:
       GF_AUTH_ANONYMOUS_ENABLED: "false"
 
 
+  cadvisor:
+    image: ghcr.io/google/cadvisor:0.60.6
+    restart: unless-stopped
+    privileged: true
+    cgroup: host
+    networks:
+      - monitoring
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker:/var/lib/docker:ro
+      - /dev/disk:/dev/disk:ro
+    devices:
+      - /dev/kmsg:/dev/kmsg
 
 volumes:
   prometheus_data:
