@@ -109,11 +109,23 @@ services:
     devices:
       - /dev/kmsg:/dev/kmsg
 
+  blackbox:
+    image: quay.io/prometheus/blackbox-exporter:v0.29.1
+    restart: unless-stopped
+    networks:
+      - default
+      - monitoring
+    volumes:
+      - ./monitoring/blackbox/blackbox.yml:/etc/blackbox_exporter/blackbox.yml:ro
+    command:
+      - "--config.file=/etc/blackbox_exporter/blackbox.yml"
+
 volumes:
   prometheus_data:
   grafana_data:
 
 networks:
+  default: {}
   monitoring:
     driver: bridge
     driver_opts:
@@ -122,4 +134,3 @@ networks:
       config:
         - subnet: 172.30.40.0/24
           gateway: 172.30.40.1
-
