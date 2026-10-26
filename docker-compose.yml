@@ -75,9 +75,28 @@ services:
     command:
       - "--path.rootfs=/host"
       - "--web.listen-address=172.17.0.1:9100"
+
+
+  grafana:
+    image: grafana/grafana:13.2.3
+    restart: unless-stopped
+    networks:
+      - monitoring
+    ports:
+      - "127.0.0.1:3001:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    environment:
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+
+
+
 volumes:
   prometheus_data:
-
+  grafana_data:
 
 networks:
   monitoring:
@@ -88,3 +107,4 @@ networks:
       config:
         - subnet: 172.30.40.0/24
           gateway: 172.30.40.1
+
