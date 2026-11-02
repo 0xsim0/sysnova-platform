@@ -1,0 +1,60 @@
+apiVersion: 1
+groups:
+    - orgId: 1
+      name: sysnova-http
+      folder: SysNova
+      interval: 30s
+      rules:
+        - uid: dg33gxjcqpkw0b
+          title: SysNova – HTTP-Prüfung fehlgeschlagen
+          condition: C
+          data:
+            - refId: A
+              relativeTimeRange:
+                from: 600
+                to: 0
+              datasourceUid: prometheus
+              model:
+                editorMode: code
+                expr: probe_success{job="blackbox_http",instance="http://proxy:80/"}
+                instant: true
+                intervalMs: 1000
+                legendFormat: __auto
+                maxDataPoints: 43200
+                range: false
+                refId: A
+            - refId: C
+              queryType: expression
+              datasourceUid: __expr__
+              model:
+                conditions:
+                    - evaluator:
+                        params:
+                            - 1
+                        type: lt
+                      operator:
+                        type: and
+                      query:
+                        params:
+                            - C
+                      reducer:
+                        params: []
+                        type: last
+                      type: query
+                datasource:
+                    type: __expr__
+                    uid: __expr__
+                expression: A
+                intervalMs: 1000
+                maxDataPoints: 43200
+                refId: C
+                type: threshold
+          noDataState: Alerting
+          execErrState: Alerting
+          for: 1m
+          annotations:
+            summary: 'SysNova: HTTP-Prüfung fehlgeschlagen oder Überwachungsdaten fehlen.'
+          labels: {}
+          isPaused: false
+          notification_settings:
+            receiver: SysNova Telegram
